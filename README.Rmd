@@ -1,0 +1,51 @@
+## Introduction
+
+This is Save the Children challenge for Barclays hackathon.
+We would like to better understand our positioning in the digital space, and improve our digital campaign strategy in response to current events. We hope that this analysis will help not only Save the Children, but also other charities to understand their digital data better.
+
+## The challenge
+
+Some of the questions that really interest us are:
+
+1. How people's engagement with charity brands (as measured by number of searches) actually relates with their fundraising success?
+
+2. How is the share of search volume changing for different charities?
+
+3. How has the industry as a whole, and also Save the Children, been affected by recent events, for example:
+- has Brexit dampened people's engagement with charity brands?
+- do emergency appeals create a blanket or specific rise in charity brand engagement?
+- do emergencies have a long-term brand engagement effect?
+
+## The data
+
+### Data we provided
+
+Getting the relevant data is a part of the challenge. To get started, we provided some data from  Google Trends API, and a tutorial showing how to access this API from R.
+The data is in the long and thin format. `date` is the identifier, `hits` is the search volume data, and `keyword` identifies the variables.
+
+In more detail:
+`date`weekly, for the last 5 years.
+`hits` search volume, indexed in relation to the keyword "donate" (see tutorial).
+`keyword` keywords used to query the Google Trends API. 
+`geo` location used to query the API. Set to "GB" for all.
+`gprop` type of data captured. All set to `web` to indicate web search data. It is possible to obtain `news` data by changing the parameters of the API call.
+`category` a redundant field. 
+
+```{r}
+generic <- read.csv("data/generic.csv")
+head(generic)
+```
+
+You do not have to use this data for the challenge - feel free to modify the API call. Note that the API is rate limited.
+
+### Additional data needed
+
+To enrich this dataset we need income data for charities. This can be found here:
+https://www.theguardian.com/news/datablog/2012/apr/24/top-1000-charities-donations-britain
+
+We also need some sort of news data to identify events of interest, such as political events or emergencies. Google Trends also provides news data, but you can be creative here.
+
+Another interesting option would be to add financial market data.
+
+
+

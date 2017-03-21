@@ -1,16 +1,11 @@
----
-title: "Save the Children Challenge Data"
-author: "Anna Dzieciol"
-date: "20 March 2017"
-output: html_document
----
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Introduction
-This tutorial shows how to get search data from Google Trends API, using R. You will also find out how we obtained the data used in the Save the Children challenge, as a part of the Barclays Hackathon. Getting the data is definately a part of the challenge. Feel free to use this code to get started.
+This tutorial shows how to get search data from Google Trends API, using R. You will also find out how we obtained the sample data provided for the challenge.
 
 ### Installing gtrendsR package
 We will be using `grendsR` package to connect to Google Trends API within R. We experienced a bug with the CRAN version and had to install the package from github using `devtools`. Note that the github version has a different syntax to the version on CRAN.
@@ -23,7 +18,7 @@ devtools::install_github('PMassicotte/gtrendsR')
 
 ### Generic keywords.
 Generic keywords are unrelated to any brand.
-We identified the generic keywords by going to Google Trends website, https://trends.google.co.uk/trends/, and manually downloading *related queries* to following keywords: charity, children, humanitarian, donate. This data can be found in `generic_keywords.csv` file.
+We identified the generic keywords by going to Google Trends website, https://trends.google.co.uk/trends/, and manually downloading *related queries* to following keywords: *charity, children, humanitarian, donate*. This data can be found in `generic_keywords.csv` file.
 
 ```{r}
 keywords_ref <- read.csv("keywords/generic_keywords.csv", stringsAsFactors = FALSE)
@@ -49,7 +44,6 @@ generic_keywords <- get_keywords(keywords, "donate")
 ```
 
 Now that we prepared our keywords, we can call Google Trends API to get the search data. Note that the API has rate limits (error message: `Error: widget$status_code == 200 is not TRUE`)
-In addition to the search data, `gtrends` function returns a "related topics" and "related queries". We will make use of this later. 
 
 ```{r}
 get_trends <- function(keyword_list) {
@@ -78,21 +72,17 @@ Now that we know that the data is correct, we can remove the repeated "donate" c
 
 ```{r}
 generic <- generic[!duplicated(generic), ]
-write.csv(generic, "keywords/generic.csv")
-```
-
-This data is in the long and thin format. `date` is weekly, for the last 5 years. `hits` is the search volume, `keyword` is the search term - this column has all 90 search terms used. `geo`, `gprop` and `category` are some of the parameters of the gtrends function.
-
-```{r}
-head(generic)
+write.csv(generic, "data/generic.csv")
 ```
 
 ### Brand keywords
 We will now look at searches for major UK charities. To get the keywords, we will use the list based on Charity Brand Index:
-http://www.wikigiving.org.uk/index.php?title=Largest_UK_charities . This data is saved in `top124_charities.txt`
+http://www.wikigiving.org.uk/index.php?title=Largest_UK_charities . This data is saved in `top124_charities.txt`.
 
 ```{r}
 top124 <- readLines("keywords/top124_charities.txt")
 brand_keywords <- get_keywords(top124, "donate")
 brand <- get_trends(brand_keywords)
 ```
+
+We got rate limited trying to download this :)
