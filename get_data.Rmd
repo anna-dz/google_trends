@@ -13,6 +13,7 @@ We will be using `grendsR` package to connect to Google Trends API within R. We 
 ```{r}
 library(devtools)
 devtools::install_github('PMassicotte/gtrendsR')
+library(gtrendsR)
 ```
 
 
@@ -43,27 +44,28 @@ get_keywords <- function(data, reference) {
 generic_keywords <- get_keywords(keywords, "donate")
 ```
 
-Now that we prepared our keywords, we can call Google Trends API to get the search data. Note that the API has rate limits (error message: `Error: widget$status_code == 200 is not TRUE`)
+Now that we prepared our keywords, we can call Google Trends API to get the search data. Note that the API has rate limits (error message: `Error: widget$status_code == 200 is not TRUE`). In this case, wait a bit and rerun the command again, it will pick up where it left off.
 
 ```{r}
-get_trends <- function(keyword_list) {
-  library(gtrendsR)
-  output <- list()
-  for (i in 1:length(keyword_list)) {
-    dat <- gtrends(unlist(keyword_list[i]), geo = "GB", time = "today+5-y", gprop = "web")
-    output[[i]] <- dat
+get_trends <- function(keyword_list, filepath) {
+  if (file.exists(filepath)) {
+    start_data <- read.csv(filepath)
+    last_iteration <- start_data[nrow(start_data), 1]
+  } else {
+    last_iteration = 0
   }
-  # Here, we extract the timeseries data only and convert to a dataframe.
-  timeseries <- sapply(output, "[", 1)
-  timeseries_df <- do.call("rbind", timeseries)
-  rownames(timeseries_df) <- seq(1:nrow(timeseries_df)) 
-  return(timeseries_df)
+  for (i in (last_iteration + 1):length(keyword_list)) {
+    dat <- gtrends(unlist(keyword_list[i]), geo = "GB", time = "today+5-y", gprop = "web")
+    dat <- cbind(i, dat$interest_over_time)
+    write.csv(dat, filepath, append = TRUE, row.names = FALSE)
+  }
 }
-generic <- get_trends(generic_keywords)
+generic <- get_trends(generic_keywords, "data/generic.csv")
 ```
 
 We test that we indexed the data correctly - only the "donate" keyword should show up with the search volume of 100.
 ```{r}
+generic <- read.csv("data/generic.csv")
 test <- generic[generic$hits == 100, ]
 test <- unique(test$keyword)
 ```
@@ -82,7 +84,7 @@ http://www.wikigiving.org.uk/index.php?title=Largest_UK_charities . This data is
 ```{r}
 top124 <- readLines("keywords/top124_charities.txt")
 brand_keywords <- get_keywords(top124, "donate")
-brand <- get_trends(brand_keywords)
+brand <- get_trends(brand_keywords, "data/brand.csv")
 ```
 
 We got rate limited trying to download this :)
