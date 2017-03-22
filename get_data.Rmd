@@ -39,6 +39,8 @@ get_keywords <- function(data, reference) {
   for (i in 1:length(keywords)) {keywords[[i]][5] <- reference}
   # Remove NA's
   keywords <- lapply(keywords, function(x) x[!is.na(x)])
+  # Remove punctuation marks
+  keywords <- lapply(keywords, function(x) gsub("[[:punct:]]", "", x))
 }
 
 generic_keywords <- get_keywords(keywords, "donate")
@@ -57,10 +59,10 @@ get_trends <- function(keyword_list, filepath) {
   for (i in (last_iteration + 1):length(keyword_list)) {
     dat <- gtrends(unlist(keyword_list[i]), geo = "GB", time = "today+5-y", gprop = "web")
     dat <- cbind(i, dat$interest_over_time)
-    write.csv(dat, filepath, append = TRUE, row.names = FALSE)
+    write.table(dat, filepath, append = TRUE, row.names = FALSE, sep = ",", col.names = FALSE)
   }
 }
-generic <- get_trends(generic_keywords, "data/generic.csv")
+get_trends(generic_keywords, "data/generic.csv")
 ```
 
 We test that we indexed the data correctly - only the "donate" keyword should show up with the search volume of 100.
@@ -73,18 +75,27 @@ test <- unique(test$keyword)
 Now that we know that the data is correct, we can remove the repeated "donate" calls, and save it for analysis.
 
 ```{r}
-generic <- generic[!duplicated(generic), ]
+generic <- generic[!duplicated(generic[, -1]), ]
 write.csv(generic, "data/generic.csv")
 ```
 
 ### Brand keywords
 We will now look at searches for major UK charities. To get the keywords, we will use the list based on Charity Brand Index:
-http://www.wikigiving.org.uk/index.php?title=Largest_UK_charities . This data is saved in `top124_charities.txt`.
+http://www.wikigiving.org.uk/index.php?title=Largest_UK_charities . This data is saved in `top124_charities.txt`. This time we will index the data to "Comic Relief", as this keyword has the highest search volume of the set.
 
 ```{r}
 top124 <- readLines("keywords/top124_charities.txt")
-brand_keywords <- get_keywords(top124, "donate")
-brand <- get_trends(brand_keywords, "data/brand.csv")
+brand_keywords <- get_keywords(top124, "Comic Relief")
+get_trends(brand_keywords, "data/brand_raw.csv")
 ```
 
-We got rate limited trying to download this :)
+Again, we test and clean up the data.
+```{r}
+brand <- read.csv("data/brand_raw.csv", header = FALSE, stringsAsFactors = FALSE)
+colnames(brand) <- c("i", "date", "hits", "keyword", "geo", "gprop", "category")
+test <- brand[brand$hits == 100, ]
+test <- unique(test$keyword)
+brand <- brand[!duplicated(brand[, -1]), ]
+write.csv(brand, "data/brand.csv")
+```
+

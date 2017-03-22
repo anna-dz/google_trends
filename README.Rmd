@@ -21,15 +21,18 @@ Some of the questions that really interest us are:
 ### Data we provided
 
 Getting the relevant data is a part of the challenge. To get started, we provided some data from  Google Trends API, and a tutorial showing how to access this API from R.
-The data is in the long and thin format. `date` is the identifier, `hits` is the search volume data, and `keyword` identifies the variables.
 
-In more detail:
-`date`weekly, for the last 5 years.
-`hits` search volume, indexed in relation to the keyword "donate" (see tutorial).
-`keyword` keywords used to query the Google Trends API. 
-`geo` location used to query the API. Set to "GB" for all.
-`gprop` type of data captured. All set to `web` to indicate web search data. It is possible to obtain `news` data by changing the parameters of the API call.
-`category` a redundant field. 
+The datafiles are called `generic.csv` and `brand.csv`, which contain generic and brand keywords, respectively. The generic search data is indexed to keyword "donate", and brand search data is indexed to "Comic Relief".
+
+The data is in the long and thin format. `date` is the identifier, `hits` is the search volume data, and `keyword` identifies the variables.
+  
+In more detail:  
+`date`weekly, for the last 5 years.  
+`hits` search volume, indexed in relation to the keyword "donate" (see tutorial).  
+`keyword` keywords used to query the Google Trends API.   
+`geo` location used to query the API. Set to "GB" for all.  
+`gprop` type of data captured. All set to `web` to indicate web search data. It is possible to obtain `news` data by changing the parameters of the API call.  
+`category` a redundant field.   
 
 ```{r}
 generic <- read.csv("data/generic.csv")
@@ -45,7 +48,6 @@ https://www.theguardian.com/news/datablog/2012/apr/24/top-1000-charities-donatio
 
 We also need some sort of news data to identify events of interest, such as political events or emergencies. Google Trends also provides news data, but you can be creative here.
 
-Another interesting option would be to add financial market data.
 
 
 
