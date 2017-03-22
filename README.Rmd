@@ -28,6 +28,8 @@ Using this resource, we collated data on over 90 generic search keywords, and 12
 
 The datafiles are called `generic.csv` and `brand.csv`, which contain generic and brand keywords, respectively. The generic search data is indexed to keyword "donate", and brand search data is indexed to "Comic Relief".
 
+![Google Trends data](search_data.png)
+
 The data is in the long and thin format. `date` is the identifier, `hits` is the search volume data, and `keyword` identifies the variables.
   
 In more detail:  
