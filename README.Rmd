@@ -18,9 +18,9 @@ Some of the questions that really interest us are:
 
 ## The data
 
-### Data we provided
+### Google Trends
 
-Getting the relevant data is a part of the challenge. To get started, we provided some data from  Google Trends API, and a tutorial showing how to access this API from R.
+Getting the relevant data is a part of the challenge. To get started, we provided some data from  Google Trends API, and a tutorial showing how to access this API from R. The Google Trends data shows organic search interest for different keywords.
 
 The datafiles are called `generic.csv` and `brand.csv`, which contain generic and brand keywords, respectively. The generic search data is indexed to keyword "donate", and brand search data is indexed to "Comic Relief".
 
@@ -40,6 +40,10 @@ head(generic)
 ```
 
 You do not have to use this data for the challenge - feel free to modify the API call. Note that the API is rate limited.
+
+### Emergency dates
+
+Dates of recent major emergencies can be found in `data\emergencies.csv`
 
 ### Additional data needed
 
