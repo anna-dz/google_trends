@@ -5,7 +5,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Introduction
-This tutorial shows how to get search data from Google Trends API, using R. You will also find out how we obtained the sample data provided for the challenge.
+This tutorial shows how to get search data from Google Trends API, using R.  
+Below we provide the complete code used to obtain datasets included in the challenge. You do not need to run this code, as full outputs are provided.  
 
 ### Installing gtrendsR package
 We will be using `grendsR` package to connect to Google Trends API within R. We experienced a bug with the CRAN version and had to install the package from github using `devtools`. Note that the github version has a different syntax to the version on CRAN.
@@ -27,7 +28,7 @@ keywords <- keywords_ref[, 1]
 ```
 
 Google Trends allows to input a maximum of 5 keywords per query, and will return data indexed to the keyword with the highest search volume. We will therefore split our keywords into groups of four, and add a fifth keyword, "donate" for reference, to each group. We get rid of a few high volume keywords which will skew the data too much. 
-If we didn't want the data to be indexed to "donate", we just need to pass the keywords one by one.
+If we didn't want the data to be indexed to "donate", we skip the `get_keywords()` function and simply pass the keywords one by one to `gtrends()`.
 
 ```{r}
 high_volume_generic <- c("children in need", "donation", "children in need 2013", "blood", "charity", 
@@ -72,7 +73,7 @@ test <- generic[generic$hits == 100, ]
 test <- unique(test$keyword)
 ```
 
-Now that we know that the data is correct, we can remove the repeated "donate" calls, and save it for analysis.
+Now that we know that the data is correct, we can remove the repeated "donate" calls, and save the data for analysis.
 
 ```{r}
 generic <- generic[!duplicated(generic[, -1]), ]

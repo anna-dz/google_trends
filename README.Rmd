@@ -16,11 +16,15 @@ Some of the questions that really interest us are:
 - do emergency appeals create a blanket or specific rise in charity brand engagement?
 - do emergencies have a long-term brand engagement effect?
 
+4. Are there seasonality effects in brand engagement for Save the Children and other charities?
+
 ## The data
 
 ### Google Trends
 
-Getting the relevant data is a part of the challenge. To get started, we provided some data from  Google Trends API, and a tutorial showing how to access this API from R. The Google Trends data shows organic search interest for different keywords.
+The Google Trends data shows organic search interest for different keywords. You can explore this data on Google Trends website: 
+https://trends.google.co.uk/trends/
+Using this resource, we collated data on over 90 generic search keywords, and 124 brand keywords. `get_data.Rmd` is a tutorial showing how we got the data using the Google Trends API from within R. You can use this to obtain additional data, however this is not required for the challenge.  
 
 The datafiles are called `generic.csv` and `brand.csv`, which contain generic and brand keywords, respectively. The generic search data is indexed to keyword "donate", and brand search data is indexed to "Comic Relief".
 
@@ -28,29 +32,22 @@ The data is in the long and thin format. `date` is the identifier, `hits` is the
   
 In more detail:  
 `date`weekly, for the last 5 years.  
-`hits` search volume, indexed in relation to the keyword "donate" (see tutorial).  
+`hits` search volume, indexed in relation to the keyword "donate" or "Comic Relief" (see tutorial).  
 `keyword` keywords used to query the Google Trends API.   
 `geo` location used to query the API. Set to "GB" for all.  
 `gprop` type of data captured. All set to `web` to indicate web search data. It is possible to obtain `news` data by changing the parameters of the API call.  
 `category` a redundant field.   
 
-```{r}
-generic <- read.csv("data/generic.csv")
-head(generic)
-```
-
-You do not have to use this data for the challenge - feel free to modify the API call. Note that the API is rate limited.
-
 ### Emergency dates
 
-Dates of recent major emergencies can be found in `data\emergencies.csv`
+Approximate dates of recent major emergencies can be found in `data\emergencies.csv`
 
 ### Additional data needed
 
 To enrich this dataset we need income data for charities. This can be found here:
 https://www.theguardian.com/news/datablog/2012/apr/24/top-1000-charities-donations-britain
 
-We also need some sort of news data to identify events of interest, such as political events or emergencies. Google Trends also provides news data, but you can be creative here.
+We also need some sort of news data to identify events of interest, such as political events or emergencies. One source could be Google Trends, which also provides news data.
 
 
 
